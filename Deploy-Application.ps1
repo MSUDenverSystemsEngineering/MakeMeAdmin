@@ -70,7 +70,7 @@ Try {
 	[string]$appLang = 'EN'
 	[string]$appRevision = '01'
 	[string]$appScriptVersion = '3.7.0.1'
-	[string]$appScriptDate = '06/22/2018'
+	[string]$appScriptDate = '07/27/2018'
 	[string]$appScriptAuthor = 'MSU Denver'
 	##*===============================================
 	## Variables: Install Titles (Only set here to override defaults set by the toolkit)
@@ -119,7 +119,8 @@ Try {
 		[string]$installPhase = 'Pre-Installation'
 
 		## Show Welcome Message, close Internet Explorer if needed, verify there is enough disk space to complete the install, and persist the prompt
-		Show-InstallationWelcome -CloseApps 'iexplore' -CheckDiskSpace -PersistPrompt
+		#Show-InstallationWelcome -CloseApps 'iexplore' -CheckDiskSpace -PersistPrompt
+		Show-InstallationWelcome -CheckDiskSpace -PersistPrompt
 
 		## Show Progress Message (with the default message)
 		Show-InstallationProgress
@@ -150,7 +151,14 @@ Try {
 
 		## <Perform Post-Installation tasks here>
 
-		Execute-Process -FilePath "reg.exe" -Parameters "IMPORT `"$dirFiles\mma.reg`"" -PassThru
+		$currentUserSID = (New-Object System.Security.Principal.NTAccount($env:username)).Translate([System.Security.Principal.SecurityIdentifier]).value
+		$timeoutMinutes = 15
+		$removeAdminRightsOnLogout = True
+		$registryPath = "HKLM:\SOFTWARE\Policies\Sinclair Community College\Make Me Admin"
+
+		New-ItemProperty -Path $registryPath -Name 'Allowed Entities' -Value $currentUserSID -PropertyType MultiString -Force
+		New-ItemProperty -Path $registryPath -Name 'Admin Rights Timeout' -Value $timeoutMinutes -PropertyType DWord -Force
+		New-ItemProperty -Path $registryPath -Name 'Remove Admin Rights On Logout' -Value $removeAdminRightsOnLogout -PropertyType Dword -Force
 
 		## Display a message at the end of the install
 		If (-not $useDefaultMsi) {
@@ -165,7 +173,7 @@ Try {
 		[string]$installPhase = 'Pre-Uninstallation'
 
 		## Show Welcome Message, close Internet Explorer with a 60 second countdown before automatically closing
-		Show-InstallationWelcome -CloseApps 'iexplore' -CloseAppsCountdown 60
+		#Show-InstallationWelcome -CloseApps 'iexplore' -CloseAppsCountdown 60
 
 		## Show Progress Message (with the default message)
 		Show-InstallationProgress
