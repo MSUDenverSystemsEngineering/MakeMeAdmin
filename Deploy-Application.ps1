@@ -151,7 +151,7 @@ Try {
 
 		## <Perform Post-Installation tasks here>
 
-		$currentUserName = Get-WMIObject -Class Win32_ComputerSystem | Select-Object -Expand UserName
+		$currentUserName = Get-CIMInstance -Class CIM_ComputerSystem | Select-Object -Expand UserName
 		$currentUserSID = (New-Object System.Security.Principal.NTAccount($currentUserName)).Translate([System.Security.Principal.SecurityIdentifier]).value
 		$timeoutMinutes = '15'
 		$removeAdminRightsOnLogout = '1'
