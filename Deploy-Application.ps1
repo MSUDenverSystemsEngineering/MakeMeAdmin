@@ -125,7 +125,8 @@ Try {
 		Show-InstallationProgress
 
 		## <Perform Pre-Installation tasks here>
-
+		$exitCode = Execute-Process -Path "{87EAC1A2-9DE1-4838-8093-74C2AA19ED27}" -Parameters "" -WindowStyle "Hidden" -PassThru
+        If (($exitCode.ExitCode -ne "0") -and ($mainExitCode -ne "3010")) { $mainExitCode = $exitCode.ExitCode }
 
 		##*===============================================
 		##* INSTALLATION
@@ -140,7 +141,7 @@ Try {
 
 		## <Perform Installation tasks here>
 
-		$exitCode = Execute-MSI -Action 'Install' -Path "$dirFiles\MakeMeAdmin 2.2.1 x64.msi" -Parameters '/qn'
+		$exitCode = Execute-MSI -Action 'Install' -Path "$dirFiles\MakeMeAdmin 2.2.1 x64.msi" -Parameters '/qn' -WindowStyle "Hidden" -PassThru
         If (($exitCode.ExitCode -ne "0") -and ($mainExitCode -ne "3010")) { $mainExitCode = $exitCode.ExitCode }
 
 		##*===============================================
@@ -193,7 +194,7 @@ Try {
 
 		# <Perform Uninstallation tasks here>
 
-		$exitCode = Execute-Process -Path "{87EAC1A2-9DE1-4838-8093-74C2AA19ED27}" -Parameters "/qn" -WindowStyle "Hidden" -PassThru
+		$exitCode = Execute-Process -Path "{87EAC1A2-9DE1-4838-8093-74C2AA19ED27}" -Parameters "" -WindowStyle "Hidden" -PassThru
         If (($exitCode.ExitCode -ne "0") -and ($mainExitCode -ne "3010")) { $mainExitCode = $exitCode.ExitCode }
 
 		##*===============================================
