@@ -151,9 +151,9 @@ Try {
 		## <Perform Post-Installation tasks here>
 
 		$currentUserSID = (New-Object System.Security.Principal.NTAccount($env:username)).Translate([System.Security.Principal.SecurityIdentifier]).value
-		$timeoutMinutes = 15
-		$removeAdminRightsOnLogout = True
-		$registryPath = "HKLM:\SOFTWARE\Policies\Sinclair Community College\Make Me Admin"
+		$timeoutMinutes = '15'
+		$removeAdminRightsOnLogout = 'True'
+		$registryPath = 'HKLM:\SOFTWARE\Policies\Sinclair Community College\Make Me Admin'
 
 		New-ItemProperty -Path $registryPath -Name 'Allowed Entities' -Value $currentUserSID -PropertyType MultiString -Force
 		New-ItemProperty -Path $registryPath -Name 'Admin Rights Timeout' -Value $timeoutMinutes -PropertyType DWord -Force
