@@ -63,14 +63,14 @@ Try {
 	##* VARIABLE DECLARATION
 	##*===============================================
 	## Variables: Application
-	[string]$appVendor = 'MakeMeAdmin'
-	[string]$appName = ''
+	[string]$appVendor = 'Sinclair Community College'
+	[string]$appName = 'Make Me Admin'
 	[string]$appVersion = '2.2.1'
 	[string]$appArch = 'x64'
 	[string]$appLang = 'EN'
 	[string]$appRevision = '01'
 	[string]$appScriptVersion = '3.7.0.1'
-	[string]$appScriptDate = '07/27/2018'
+	[string]$appScriptDate = '07/30/2018'
 	[string]$appScriptAuthor = 'MSU Denver'
 	##*===============================================
 	## Variables: Install Titles (Only set here to override defaults set by the toolkit)
@@ -193,7 +193,7 @@ Try {
 
 		# <Perform Uninstallation tasks here>
 
-		$exitCode = Execute-Process -Path "" -Parameters "" -WindowStyle "Hidden" -PassThru
+		$exitCode = Execute-Process -Path "{87EAC1A2-9DE1-4838-8093-74C2AA19ED27}" -Parameters "/qn" -WindowStyle "Hidden" -PassThru
         If (($exitCode.ExitCode -ne "0") -and ($mainExitCode -ne "3010")) { $mainExitCode = $exitCode.ExitCode }
 
 		##*===============================================
