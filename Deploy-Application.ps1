@@ -153,7 +153,7 @@ Try {
 
 		$currentUserSID = (New-Object System.Security.Principal.NTAccount($env:username)).Translate([System.Security.Principal.SecurityIdentifier]).value
 		$timeoutMinutes = '15'
-		$removeAdminRightsOnLogout = 'True'
+		$removeAdminRightsOnLogout = '1'
 		$registryPath = 'HKLM:\SOFTWARE\Sinclair Community College\Make Me Admin'
 
 		New-ItemProperty -Path $registryPath -Name 'Allowed Entities' -Value $currentUserSID -PropertyType MultiString -Force
