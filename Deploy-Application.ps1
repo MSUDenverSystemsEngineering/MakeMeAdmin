@@ -125,7 +125,7 @@ Try {
 		Show-InstallationProgress
 
 		## <Perform Pre-Installation tasks here>
-		$exitCode = Execute-Process -Path "{87EAC1A2-9DE1-4838-8093-74C2AA19ED27}" -Parameters "" -WindowStyle "Hidden" -PassThru
+		$exitCode = Execute-Process -Path "{87EAC1A2-9DE1-4838-8093-74C2AA19ED27}" -WindowStyle "Hidden" -PassThru
         If (($exitCode.ExitCode -ne "0") -and ($mainExitCode -ne "3010")) { $mainExitCode = $exitCode.ExitCode }
 
 		##*===============================================
@@ -194,7 +194,7 @@ Try {
 
 		# <Perform Uninstallation tasks here>
 
-		$exitCode = Execute-Process -Path "{87EAC1A2-9DE1-4838-8093-74C2AA19ED27}" -Parameters "" -WindowStyle "Hidden" -PassThru
+		$exitCode = Execute-Process -Path "{87EAC1A2-9DE1-4838-8093-74C2AA19ED27}" -WindowStyle "Hidden" -PassThru
         If (($exitCode.ExitCode -ne "0") -and ($mainExitCode -ne "3010")) { $mainExitCode = $exitCode.ExitCode }
 
 		##*===============================================
