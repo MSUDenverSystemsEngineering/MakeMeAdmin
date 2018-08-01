@@ -63,7 +63,7 @@ Try {
 	##* VARIABLE DECLARATION
 	##*===============================================
 	## Variables: Application
-	[string]$appVendor = 'Sinclair Community College'
+	[string]$appVendor = 'MakeMeAdmin'
 	[string]$appName = 'Make Me Admin'
 	[string]$appVersion = '2.2.1'
 	[string]$appArch = 'x64'
