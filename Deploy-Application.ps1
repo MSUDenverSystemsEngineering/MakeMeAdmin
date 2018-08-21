@@ -155,11 +155,15 @@ Try {
 		$currentUserSID = (New-Object System.Security.Principal.NTAccount($currentUserName)).Translate([System.Security.Principal.SecurityIdentifier]).value
 		$timeoutMinutes = '15'
 		$removeAdminRightsOnLogout = '1'
-		$registryPath = 'HKLM:\SOFTWARE\Sinclair Community College\Make Me Admin'
+		$MMAregistryPath = 'HKLM:\SOFTWARE\Sinclair Community College\Make Me Admin'
+		$UACregistryPath = 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System'
+		$enableUAC = '1'
 
-		New-ItemProperty -Path $registryPath -Name 'Allowed Entities' -Value $currentUserSID -PropertyType MultiString -Force
-		New-ItemProperty -Path $registryPath -Name 'Admin Rights Timeout' -Value $timeoutMinutes -PropertyType DWord -Force
-		New-ItemProperty -Path $registryPath -Name 'Remove Admin Rights On Logout' -Value $removeAdminRightsOnLogout -PropertyType Dword -Force
+		New-ItemProperty -Path $MMAregistryPath -Name 'Allowed Entities' -Value $currentUserSID -PropertyType MultiString -Force
+		New-ItemProperty -Path $MMAregistryPath -Name 'Admin Rights Timeout' -Value $timeoutMinutes -PropertyType DWord -Force
+		New-ItemProperty -Path $MMAregistryPath -Name 'Remove Admin Rights On Logout' -Value $removeAdminRightsOnLogout -PropertyType Dword -Force
+		New-ItemProperty -Path $UACregistryPath -Name 'EnableLUA' -Value $enableUAC -PropertyType Dword -Force
+
 
 		## Display a message at the end of the install
 		If (-not $useDefaultMsi) {
