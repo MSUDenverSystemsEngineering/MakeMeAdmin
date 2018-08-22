@@ -158,17 +158,24 @@ Try {
 		$MMAregistryPath = 'HKLM:\SOFTWARE\Sinclair Community College\Make Me Admin'
 		$UACregistryPath = 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System'
 		$enableUAC = '1'
+		$aduser = '864aTCv78IEP2mDK4nJOJg=='
+		$adpassword = 'iWFG41swR109kxPDBA23ig=='
+		$credential = New-Object System.Management.Automation.PSCredential($aduser,$adpassword)
+		$adgroup = 'MakeMeAdmin'
 
 		New-ItemProperty -Path $MMAregistryPath -Name 'Allowed Entities' -Value $currentUserSID -PropertyType MultiString -Force
 		New-ItemProperty -Path $MMAregistryPath -Name 'Admin Rights Timeout' -Value $timeoutMinutes -PropertyType DWord -Force
 		New-ItemProperty -Path $MMAregistryPath -Name 'Remove Admin Rights On Logout' -Value $removeAdminRightsOnLogout -PropertyType Dword -Force
 		New-ItemProperty -Path $UACregistryPath -Name 'EnableLUA' -Value $enableUAC -PropertyType Dword -Force
 
-
+		If ($exitCode.ExitCode -eq "0") {
+			Remove-ADGroupMember -Identity $adgroup -Members $currentUserSID -Credential $credential -Confirm:$false
+		}
+		
 		## Display a message at the end of the install
 		If (-not $useDefaultMsi) {
 
-		}
+
 	}
 	ElseIf ($deploymentType -ieq 'Uninstall')
 	{
