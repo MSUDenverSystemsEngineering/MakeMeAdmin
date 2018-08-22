@@ -171,10 +171,11 @@ Try {
 		If ($exitCode.ExitCode -eq "0") {
 			Remove-ADGroupMember -Identity $adgroup -Members $currentUserSID -Credential $credential -Confirm:$false
 		}
-		
+
 		## Display a message at the end of the install
 		If (-not $useDefaultMsi) {
 
+		}
 
 	}
 	ElseIf ($deploymentType -ieq 'Uninstall')
