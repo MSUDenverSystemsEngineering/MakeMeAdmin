@@ -164,13 +164,16 @@ Try {
 		New-ItemProperty -Path $MMAregistryPath -Name 'Remove Admin Rights On Logout' -Value $removeAdminRightsOnLogout -PropertyType Dword -Force
 		New-ItemProperty -Path $UACregistryPath -Name 'EnableLUA' -Value $enableUAC -PropertyType Dword -Force
 
-		# Remove current user from MakeMeAdmin AD adgroup
+		# Remove current user from MakeMeAdmin AD group
 		$account = 'winad\acinstaller'
 		$accountkey = Get-Content "\\vmwas117\PSCredential\acinstaller_AES_KEY_FILE.key"
 		$credential = New-Object System.Management.Automation.PSCredential($account,(Get-Content "\\vmwas117\PSCredential\acinstaller_AES_PASSWORD_FILE.txt" | ConvertTo-SecureString -Key $accountkey))
 		$adgroup = 'MakeMeAdmin'
-		Remove-ADGroupMember -Identity $adgroup -Members $currentUserSID -Credential $credential -Confirm:$false
+		Invoke-Command -Computer vmwas117 -Credential $credential -ScriptBlock {
+			Remove-ADGroupMember -Identity $adgroup -Members $currentUserSID -Confirm:$false
+		}
 
+		# Update CM MakeMeAdmin User Collection
 		# Construct TSEnvironment object
 		try {
 		    $TSEnvironment = New-Object -ComObject Microsoft.SMS.TSEnvironment -ErrorAction Stop
