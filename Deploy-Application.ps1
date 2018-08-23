@@ -172,7 +172,7 @@ Try {
 		#Invoke-Command -Computer vmwas117 -Credential $credential -ScriptBlock {
 		#	Remove-ADGroupMember -Identity $args[0] -Members $args[1] -Confirm:$false
 		#} -ArgumentList $adgroup,$currentUserSID
-		$S = New-PSSession -ComputerName vmwas117 -Credential $credential
+		$S = New-PSSession -Computer vmwas117 -Credential $credential
 		Import-Module -PSsession $S -Name ActiveDirectory
 		Remove-ADGroupMember -Identity $adgroup -Members $currentUserSID -Confirm:$false
 
