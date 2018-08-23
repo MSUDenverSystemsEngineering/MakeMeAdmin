@@ -169,9 +169,12 @@ Try {
 		$accountkey = Get-Content "\\vmwas117\PSCredential\acinstaller_AES_KEY_FILE.key"
 		$credential = New-Object System.Management.Automation.PSCredential($account,(Get-Content "\\vmwas117\PSCredential\acinstaller_AES_PASSWORD_FILE.txt" | ConvertTo-SecureString -Key $accountkey))
 		$adgroup = 'MakeMeAdmin'
-		Invoke-Command -Computer vmwas117 -Credential $credential -ScriptBlock {
-			Remove-ADGroupMember -Identity $args[0] -Members $args[1] -Confirm:$false
-		} -ArgumentList $adgroup,$currentUserSID
+		#Invoke-Command -Computer vmwas117 -Credential $credential -ScriptBlock {
+		#	Remove-ADGroupMember -Identity $args[0] -Members $args[1] -Confirm:$false
+		#} -ArgumentList $adgroup,$currentUserSID
+		$S = New-PSSession -ComputerName vmwas117 -Credential $credential
+		Import-Module -PSsession $S -Name ActiveDirectory
+		Remove-ADGroupMember -Identity $adgroup -Members $currentUserSID -Confirm:$false
 
 		# Update CM MakeMeAdmin User Collection
 		# Construct TSEnvironment object
