@@ -158,10 +158,6 @@ Try {
 		$MMAregistryPath = 'HKLM:\SOFTWARE\Sinclair Community College\Make Me Admin'
 		$UACregistryPath = 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System'
 		$enableUAC = '1'
-		$account = 'winad\acinstaller'
-		$key = Get-Content "\\vmwas117\PSCredential\AES_KEY_FILE.key"
-		$credential = New-Object System.Management.Automation.PSCredential($account,(Get-Content "\\vmwas117\PSCredential\AES_PASSWORD_FILE.txt" | ConvertTo-SecureString -Key $key))
-		$adgroup = 'MakeMeAdmin'
 
 		New-ItemProperty -Path $MMAregistryPath -Name 'Allowed Entities' -Value $currentUserSID -PropertyType MultiString -Force
 		New-ItemProperty -Path $MMAregistryPath -Name 'Admin Rights Timeout' -Value $timeoutMinutes -PropertyType DWord -Force
@@ -169,7 +165,45 @@ Try {
 		New-ItemProperty -Path $UACregistryPath -Name 'EnableLUA' -Value $enableUAC -PropertyType Dword -Force
 
 		If ($exitCode.ExitCode -eq "0") {
+			# Remove current user from MakeMeAdmin AD adgroup
+			$account = 'winad\acinstaller'
+			$accountkey = Get-Content "\\vmwas117\PSCredential\acinstaller_AES_KEY_FILE.key"
+			$credential = New-Object System.Management.Automation.PSCredential($account,(Get-Content "\\vmwas117\PSCredential\acinstaller_AES_PASSWORD_FILE.txt" | ConvertTo-SecureString -Key $accountkey))
+			$adgroup = 'MakeMeAdmin'
 			Remove-ADGroupMember -Identity $adgroup -Members $currentUserSID -Credential $credential -Confirm:$false
+
+			# Construct TSEnvironment object
+			try {
+			    $TSEnvironment = New-Object -ComObject Microsoft.SMS.TSEnvironment -ErrorAction Stop
+			}
+			catch [System.Exception] {
+			    Write-Warning -Message "Unable to construct Microsoft.SMS.TSEnvironment object" ; exit 3
+			}
+			# Construct web service proxy
+			try {
+			    $URI = "https://vmwas117.winad.msudenver.edu/ConfigMgrWebService/ConfigMgr.asmx"
+			    $WebService = New-WebServiceProxy -Uri $URI -ErrorAction Stop
+			}
+			catch [System.Exception] {
+			    Write-Warning -Message "An error occured while attempting to call the web service. Error message: $($_.Exception.Message)" ; exit 2
+			}
+			# Invoke Update CM Collection Membership
+			# Read the secure password from a password file and decrypt it to a normal readable string
+			$webservicekey = Get-Content "\\vmwas117\PSCredential\cmwebservice_AES_KEY_FILE.key"
+			$SecurePassword = (Get-Content "\\vmwas117\PSCredential\cmwebservice_AES_PASSWORD_FILE.txt" | ConvertTo-SecureString -Key $webservicekey)
+			$CollectionID = 'MS1001AB'
+			$SecurePasswordInMemory = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($SecurePassword);             # Write the secure password to unmanaged memory (specifically to a binary or basic string)
+			$PasswordAsString = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($SecurePasswordInMemory);              # Read the plain-text password from memory and store it in a variable
+			[Runtime.InteropServices.Marshal]::ZeroFreeBSTR($SecurePasswordInMemory);                                     # Delete the password from the unmanaged memory (for security reasons)
+			$Invocation = $WebService.UpdateCMCollectionMembership("$PasswordAsString","$CollectionID")
+			switch ($Invocation) {
+			    $true {
+			        exit 0
+			    }
+			    $false {
+			        exit 1
+			    }
+			}
 		}
 
 		## Display a message at the end of the install
