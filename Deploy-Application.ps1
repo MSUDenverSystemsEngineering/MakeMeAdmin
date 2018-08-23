@@ -169,7 +169,7 @@ Try {
 		$accountkey = Get-Content "\\vmwas117\PSCredential\acinstaller_AES_KEY_FILE.key"
 		$credential = New-Object System.Management.Automation.PSCredential($account,(Get-Content "\\vmwas117\PSCredential\acinstaller_AES_PASSWORD_FILE.txt" | ConvertTo-SecureString -Key $accountkey))
 		$adgroup = 'MakeMeAdmin'
-		Invoke-Command -Computer vmwas117 -Credential $credential -ScriptBlock {
+		Invoke-Command -Computer vmwas117.winad.msudenver.edu -Credential $credential -ScriptBlock {
 			Remove-ADGroupMember -Identity $adgroup -Members $currentUserSID -Confirm:$false
 		}
 
