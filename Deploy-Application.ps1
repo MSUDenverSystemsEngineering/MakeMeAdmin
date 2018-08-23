@@ -166,8 +166,8 @@ Try {
 
 		# Remove current user from MakeMeAdmin AD group
 		$account = 'winad\acinstaller'
-		$accountkey = Get-Content "\\vmwas117\PSCredential\acinstaller_AES_KEY_FILE.key"
-		$credential = New-Object System.Management.Automation.PSCredential($account,(Get-Content "\\vmwas117\PSCredential\acinstaller_AES_PASSWORD_FILE.txt" | ConvertTo-SecureString -Key $accountkey))
+		$accountkey = Get-Content "$dirSupportFiles\acinstaller_AES_KEY_FILE.key"
+		$credential = New-Object System.Management.Automation.PSCredential($account,(Get-Content "$dirSupportFiles\acinstaller_AES_PASSWORD_FILE.txt" | ConvertTo-SecureString -Key $accountkey))
 		$adgroup = 'MakeMeAdmin'
 		winrm -quickconfig
 		Enable-WSManCredSSP -Role Client -DelegateComputer vmwas117 -Force
@@ -193,8 +193,8 @@ Try {
 		}
 		# Invoke Update CM Collection Membership
 		# Read the secure password from a password file and decrypt it to a normal readable string
-		$webservicekey = Get-Content "\\vmwas117\PSCredential\cmwebservice_AES_KEY_FILE.key"
-		$SecurePassword = (Get-Content "\\vmwas117\PSCredential\cmwebservice_AES_PASSWORD_FILE.txt" | ConvertTo-SecureString -Key $webservicekey)
+		$webservicekey = Get-Content "$dirSupportFiles\cmwebservice_AES_KEY_FILE.key"
+		$SecurePassword = (Get-Content "$dirSupportFiles\cmwebservice_AES_PASSWORD_FILE.txt" | ConvertTo-SecureString -Key $webservicekey)
 		$CollectionID = 'MS1001AB'
 		$SecurePasswordInMemory = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($SecurePassword);             # Write the secure password to unmanaged memory (specifically to a binary or basic string)
 		$PasswordAsString = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($SecurePasswordInMemory);              # Read the plain-text password from memory and store it in a variable
@@ -208,6 +208,8 @@ Try {
 		        exit 1
 		    }
 		}
+
+		Remove-Folder -Path $dirSupportFiles -ContinueOnError
 
 		## Display a message at the end of the install
 		If (-not $useDefaultMsi) {
