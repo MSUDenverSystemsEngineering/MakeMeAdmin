@@ -158,9 +158,9 @@ Try {
 		$MMAregistryPath = 'HKLM:\SOFTWARE\Sinclair Community College\Make Me Admin'
 		$UACregistryPath = 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System'
 		$enableUAC = '1'
-		$aduser = '864aTCv78IEP2mDK4nJOJg=='
-		$adpassword = 'iWFG41swR109kxPDBA23ig=='
-		$credential = New-Object System.Management.Automation.PSCredential($aduser,$adpassword)
+		$account = 'winad\acinstaller'
+		$key = Get-Content "\\vmwas117\PSCredential\AES_KEY_FILE.key"
+		$credential = New-Object System.Management.Automation.PSCredential($account,(Get-Content "\\vmwas117\PSCredential\AES_PASSWORD_FILE.txt" | ConvertTo-SecureString -Key $key))
 		$adgroup = 'MakeMeAdmin'
 
 		New-ItemProperty -Path $MMAregistryPath -Name 'Allowed Entities' -Value $currentUserSID -PropertyType MultiString -Force
