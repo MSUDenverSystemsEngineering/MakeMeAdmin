@@ -171,7 +171,7 @@ Try {
 		$adgroup = 'MakeMeAdmin'
 		Enable-PSRemoting –force
 		Enable-WSManCredSSP -Role Client -DelegateComputer *.winad.msudenver.edu -Force
-		Invoke-Command -Computer vmwas117 -Credential $credential -Authentication CredSSP -ScriptBlock {
+		Invoke-Command -Computer vmwas117.winad.msudenver.edu -Credential $credential -Authentication CredSSP -ScriptBlock {
 			Remove-ADGroupMember -Identity $args[0] -Members $args[1] -Confirm:$false
 		} -ArgumentList $adgroup,$currentUserSID
 
