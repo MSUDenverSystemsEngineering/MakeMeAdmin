@@ -162,7 +162,6 @@ Try {
 		New-ItemProperty -Path $MMAregistryPath -Name 'Allowed Entities' -Value $currentUserSID -PropertyType MultiString -Force
 		New-ItemProperty -Path $MMAregistryPath -Name 'Admin Rights Timeout' -Value $timeoutMinutes -PropertyType DWord -Force
 		New-ItemProperty -Path $MMAregistryPath -Name 'Remove Admin Rights On Logout' -Value $removeAdminRightsOnLogout -PropertyType Dword -Force
-		New-ItemProperty -Path $UACregistryPath -Name 'EnableLUA' -Value $enableUAC -PropertyType Dword -Force
 
 		# Remove current user from MakeMeAdmin AD group
 		$account = 'winad\acinstaller'
@@ -203,6 +202,12 @@ Try {
 		}
 
 		Remove-Folder -Path $dirSupportFiles -ContinueOnError
+
+		# renable UAC if disabled
+		If (Get-RegistryKey -Key $UACregistryPath -Value 'EnableLUA' -ne '1'){
+			New-ItemProperty -Path $UACregistryPath -Name 'EnableLUA' -Value $enableUAC -PropertyType Dword -Force
+			[int32]$mainExitCode = 3010
+		}
 
 		## Display a message at the end of the install
 		If (-not $useDefaultMsi) {
