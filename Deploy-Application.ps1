@@ -169,7 +169,7 @@ Try {
 		$accountkey = Get-Content "$dirSupportFiles\acinstaller_AES_KEY_FILE.key"
 		$credential = New-Object System.Management.Automation.PSCredential($account,(Get-Content "$dirSupportFiles\acinstaller_AES_PASSWORD_FILE.txt" | ConvertTo-SecureString -Key $accountkey))
 		$adgroup = 'MakeMeAdmin'
-		winrm -quickconfig
+		Enable-PSRemoting –force
 		Enable-WSManCredSSP -Role Client -DelegateComputer *.winad.msudenver.edu -Force
 		Invoke-Command -Computer vmwas117 -Credential $credential -Authentication CredSSD -ScriptBlock {
 			Remove-ADGroupMember -Identity $args[0] -Members $args[1] -Confirm:$false
