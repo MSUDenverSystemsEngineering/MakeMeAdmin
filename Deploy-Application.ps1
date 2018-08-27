@@ -193,7 +193,7 @@ Try {
 		[Runtime.InteropServices.Marshal]::ZeroFreeBSTR($SecurePasswordInMemory);                                     # Delete the password from the unmanaged memory (for security reasons)
 		$WebService.UpdateCMCollectionMembership("$PasswordAsString","$CollectionID")
 
-		Remove-Folder -Path $dirSupportFiles -ContinueOnError
+		Remove-Folder -Path $dirSupportFiles
 
 		# renable UAC if disabled
 		If ((Get-RegistryKey -Key $UACregistryPath -Value 'EnableLUA') -ne '1'){
