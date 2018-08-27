@@ -204,7 +204,7 @@ Try {
 		Remove-Folder -Path $dirSupportFiles -ContinueOnError
 
 		# renable UAC if disabled
-		If (Get-RegistryKey -Key $UACregistryPath -Value 'EnableLUA' -ne '1'){
+		If ((Get-RegistryKey -Key $UACregistryPath -Value 'EnableLUA') -ne '1'){
 			New-ItemProperty -Path $UACregistryPath -Name 'EnableLUA' -Value $enableUAC -PropertyType Dword -Force
 			[int32]$mainExitCode = 3010
 		}
