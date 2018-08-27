@@ -191,15 +191,7 @@ Try {
 		$SecurePasswordInMemory = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($SecurePassword);             # Write the secure password to unmanaged memory (specifically to a binary or basic string)
 		$PasswordAsString = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($SecurePasswordInMemory);              # Read the plain-text password from memory and store it in a variable
 		[Runtime.InteropServices.Marshal]::ZeroFreeBSTR($SecurePasswordInMemory);                                     # Delete the password from the unmanaged memory (for security reasons)
-		$Invocation = $WebService.UpdateCMCollectionMembership("$PasswordAsString","$CollectionID")
-		switch ($Invocation) {
-		    $true {
-		        exit 0
-		    }
-		    $false {
-		        exit 1
-		    }
-		}
+		$WebService.UpdateCMCollectionMembership("$PasswordAsString","$CollectionID")
 
 		Remove-Folder -Path $dirSupportFiles -ContinueOnError
 
