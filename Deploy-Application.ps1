@@ -163,7 +163,7 @@ Try {
 		New-ItemProperty -Path $MMAregistryPath -Name 'Admin Rights Timeout' -Value $timeoutMinutes -PropertyType DWord -Force
 		New-ItemProperty -Path $MMAregistryPath -Name 'Remove Admin Rights On Logout' -Value $removeAdminRightsOnLogout -PropertyType Dword -Force
 
-		<# 
+		<#
 		#Remove current user from MakeMeAdmin AD group
 		$account = 'winad\acinstaller'
 		$accountkey = Get-Content "$dirSupportFiles\acinstaller_AES_KEY_FILE.key"
