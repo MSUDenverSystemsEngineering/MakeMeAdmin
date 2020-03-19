@@ -159,11 +159,11 @@ Try {
 		$UACregistryPath = 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System'
 		$enableUAC = '1'
 
-		New-ItemProperty -Path $MMAregistryPath -Name 'Allowed Entities' -Value $currentUserSID -PropertyType MultiString -Force
+		## New-ItemProperty -Path $MMAregistryPath -Name 'Allowed Entities' -Value $currentUserSID -PropertyType MultiString -Force
 		New-ItemProperty -Path $MMAregistryPath -Name 'Admin Rights Timeout' -Value $timeoutMinutes -PropertyType DWord -Force
 		New-ItemProperty -Path $MMAregistryPath -Name 'Remove Admin Rights On Logout' -Value $removeAdminRightsOnLogout -PropertyType Dword -Force
 
-
+		<#
 		#Remove current user from MakeMeAdmin AD group
 		$account = 'winad\acinstaller'
 		$accountkey = Get-Content "$dirSupportFiles\acinstaller_AES_KEY_FILE.key"
@@ -174,7 +174,7 @@ Try {
 		Invoke-Command -Computer vmwas117.winad.msudenver.edu -Credential $credential -Authentication CredSSP -ScriptBlock {
 			Remove-ADGroupMember -Identity $args[0] -Members $args[1] -Confirm:$false
 		} -ArgumentList $adgroup,$currentUserSID
-
+		#>
 
 		# Update CM MakeMeAdmin User Collection
 		# Construct web service proxy
