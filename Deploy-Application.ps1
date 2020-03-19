@@ -177,6 +177,7 @@ Try {
 		#>
 
 		# Update CM MakeMeAdmin User Collection
+		
 		<#
 		# Construct web service proxy
 		try {
@@ -186,7 +187,7 @@ Try {
 		catch [System.Exception] {
 		    Write-Warning -Message "An error occured while attempting to call the web service. Error message: $($_.Exception.Message)" ; exit 2
 		}
-		#>
+	
 
 		# Invoke Update CM Collection Membership
 		# Read the secure password from a password file and decrypt it to a normal readable string
@@ -196,9 +197,10 @@ Try {
 		$SecurePasswordInMemory = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($SecurePassword);             # Write the secure password to unmanaged memory (specifically to a binary or basic string)
 		$PasswordAsString = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($SecurePasswordInMemory);              # Read the plain-text password from memory and store it in a variable
 		[Runtime.InteropServices.Marshal]::ZeroFreeBSTR($SecurePasswordInMemory);                                     # Delete the password from the unmanaged memory (for security reasons)
-		## $WebService.UpdateCMCollectionMembership("$PasswordAsString","$CollectionID")
+		$WebService.UpdateCMCollectionMembership("$PasswordAsString","$CollectionID")
 
 		Remove-Folder -Path $dirSupportFiles
+		#>
 
 		# renable UAC if disabled
 		If ((Get-RegistryKey -Key $UACregistryPath -Value 'EnableLUA') -ne '1'){
