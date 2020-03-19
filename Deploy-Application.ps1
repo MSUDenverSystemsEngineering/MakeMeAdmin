@@ -152,7 +152,7 @@ Try {
 		## <Perform Post-Installation tasks here>
 
 		$currentUserName = Get-CIMInstance -Class CIM_ComputerSystem | Select-Object -Expand UserName
-		$currentUserSID = (New-Object System.Security.Principal.NTAccount($currentUserName)).Translate([System.Security.Principal.SecurityIdentifier]).value
+		## $currentUserSID = (New-Object System.Security.Principal.NTAccount($currentUserName)).Translate([System.Security.Principal.SecurityIdentifier]).value
 		$timeoutMinutes = '15'
 		$removeAdminRightsOnLogout = '1'
 		$MMAregistryPath = 'HKLM:\SOFTWARE\Sinclair Community College\Make Me Admin'
