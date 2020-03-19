@@ -177,7 +177,7 @@ Try {
 		#>
 
 		# Update CM MakeMeAdmin User Collection
-		
+
 		<#
 		# Construct web service proxy
 		try {
@@ -187,7 +187,6 @@ Try {
 		catch [System.Exception] {
 		    Write-Warning -Message "An error occured while attempting to call the web service. Error message: $($_.Exception.Message)" ; exit 2
 		}
-	
 
 		# Invoke Update CM Collection Membership
 		# Read the secure password from a password file and decrypt it to a normal readable string
